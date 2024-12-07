@@ -1,4 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { SaleEntity } from "./sale.entity";
+import { ProductEntity } from "./product.entity";
 
 
 @Entity('SALE_PRODUCT')
@@ -8,10 +10,10 @@ export class SaleProduct extends BaseEntity{
     saleProductId:number;
     
     @Column({name:'SALE_ID'})
-    saleId:number;
+    sale:SaleEntity;
 
     @Column({name:'PRODUCT_ID'})
-    productId:number;
+    product:ProductEntity;
     
 
 }
