@@ -6,7 +6,7 @@ import { ClientSaleEntity } from "./client-sale.entity";
 import { DepartmentEntity } from "./department.entity";
 import { RoleDepartmentEntity } from "./role-departament.entity";
 import { RoleEntity } from "./role.entity";
-import { SaleProductEntity } from "./sale_product";
+import { SaleProductEntity } from "./sale_product.entity";
 import { SaleEntity } from "./sale.entity";
 import { UserEntity } from "./user.entity";
 

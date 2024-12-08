@@ -1,15 +1,18 @@
-import { Column, CreateDateColumn, Entity } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { UserEntity } from "./user.entity";
 
 
 @Entity()
 export class BaseEntity{
 
-    @Column({name:'status',default:1})
+    @PrimaryGeneratedColumn({name:'ID'})
+    id:number;
+
+    @Column({name:'STATUS',default:1})
     status: number;
 
     @Column({name:'CREATED_BY'})
-    createdBy:UserEntity;
+    createdBy:number;
 
     @CreateDateColumn({
         name: 'CREATED_AT',
@@ -19,7 +22,7 @@ export class BaseEntity{
 
 
     @Column({name:'UPDATED_BY'})
-    updatedBy:UserEntity;
+    updatedBy:number;
 
     createdAt: Date;
     @CreateDateColumn({

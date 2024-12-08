@@ -1,18 +1,16 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, JoinColumn } from "typeorm";
 import { RoleEntity } from "./role.entity";
 import { DepartmentEntity } from "./department.entity";
+import { BaseEntity } from "./base-entity";
 
 
 @Entity('ROLE_DEPARTMENT')
 export class RoleDepartmentEntity extends BaseEntity{
 
-    @PrimaryGeneratedColumn({name:'ROLE_DEPARTMENT_ID'})
-    roleDepartmentId:number;
-
-    @Column({name:'ROLE_ID'})
+    @JoinColumn({name:'ROLE_ID',})
     role:RoleEntity;
 
-    @Column({name:'DEPARTMENT_ID'})
+    @JoinColumn({name:'DEPARTMENT_ID'})
     department:DepartmentEntity;
 
 

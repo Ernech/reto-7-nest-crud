@@ -1,11 +1,10 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
+import { BaseEntity } from "./base-entity";
 
 
 @Entity('DEPARTAMENT')
 export class DepartmentEntity extends BaseEntity{
 
-    @PrimaryGeneratedColumn({name:'DEPARTMENT_ID'})
-    departmentId:number
 
     @Column({name:'DEPARTAMENT_NAME'})
     departamentName:string;

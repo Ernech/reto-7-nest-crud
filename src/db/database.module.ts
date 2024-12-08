@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { databaseProviders } from './database.providers';
-import { repositoryProviders } from 'src/persistence/repository.providers';
+import { repositoryProviders } from './persistence/repository.providers';
 
 @Module({
     providers:[...databaseProviders,...repositoryProviders],

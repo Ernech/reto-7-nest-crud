@@ -1,18 +1,16 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, JoinColumn } from "typeorm";
 import { SaleEntity } from "./sale.entity";
 import { ProductEntity } from "./product.entity";
+import { BaseEntity } from "./base-entity";
 
 
 @Entity('SALE_PRODUCT')
 export class SaleProductEntity extends BaseEntity{
-
-    @PrimaryGeneratedColumn({name:'SALE_PRODUCT_ID'})
-    saleProductId:number;
     
-    @Column({name:'SALE_ID'})
+    @JoinColumn({name:'SALE_ID'})
     sale:SaleEntity;
 
-    @Column({name:'PRODUCT_ID'})
+    @JoinColumn({name:'PRODUCT_ID'})
     product:ProductEntity;
     
 

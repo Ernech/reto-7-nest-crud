@@ -1,12 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
+import { BaseEntity } from "./base-entity";
 
-@Entity()
+@Entity('ROLE')
 export class RoleEntity extends BaseEntity{
 
-    @PrimaryGeneratedColumn()
-    roleId:number;
 
-    @Column()
+    @Column({name:'ROLE_NAME'})
     roleName:string;
 
 

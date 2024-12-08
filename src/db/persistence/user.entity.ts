@@ -1,13 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn } from "typeorm";
 import { RoleEntity } from "./role.entity";
 import { DepartmentEntity } from "./department.entity";
+import { BaseEntity } from "./base-entity";
 
 
-@Entity()
+@Entity('USERS')
 export class UserEntity extends BaseEntity{
 
-    @PrimaryGeneratedColumn({name:'USER_ID'})
-    userId:number;
 
     @Column({name:'USER_NAME',length:500})
     userName:string;
@@ -15,9 +14,9 @@ export class UserEntity extends BaseEntity{
     @Column({name:'PASSWORD',length:500})
     password:string
 
-    @Column({name:'DEPARTMENT'})
+    @JoinColumn({name:'DEPARTMENT_ID'})
     department:DepartmentEntity
 
-    @Column({name:'ROLE'})
+    @JoinColumn({name:'ROLE_ID'})
     role:RoleEntity;
 }
