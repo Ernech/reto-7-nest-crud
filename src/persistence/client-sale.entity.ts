@@ -4,7 +4,7 @@ import { SaleEntity } from "./sale.entity";
 
 
 @Entity('CLIENT_SALE')
-export class ClientSale extends BaseEntity{
+export class ClientSaleEntity extends BaseEntity{
 
     @PrimaryGeneratedColumn({name:'CLIENT_SALE_ID'})
     clientSaleId:number;

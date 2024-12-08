@@ -4,7 +4,7 @@ import { DepartmentEntity } from "./department.entity";
 
 
 @Entity('ROLE_DEPARTMENT')
-export class RoleDepartment extends BaseEntity{
+export class RoleDepartmentEntity extends BaseEntity{
 
     @PrimaryGeneratedColumn({name:'ROLE_DEPARTMENT_ID'})
     roleDepartmentId:number;
