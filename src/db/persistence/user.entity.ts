@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { RoleEntity } from "./role.entity";
 import { DepartmentEntity } from "./department.entity";
 import { BaseEntity } from "./base-entity";
+import { DependenciesScanner } from "@nestjs/core/scanner";
 
 
 @Entity('USERS')
@@ -14,9 +15,7 @@ export class UserEntity extends BaseEntity{
     @Column({name:'PASSWORD',length:500})
     password:string
 
-    @JoinColumn({name:'DEPARTMENT_ID'})
-    department:DepartmentEntity
-
+    @ManyToOne(()=>RoleEntity,(role)=>role.users,{cascade:true})
     @JoinColumn({name:'ROLE_ID'})
     role:RoleEntity;
 }

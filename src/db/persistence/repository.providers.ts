@@ -4,7 +4,6 @@ import { RepositoryEnum } from "src/enums/repositories.enum";
 import { ClientEntity } from "./client.entity";
 import { ClientSaleEntity } from "./client-sale.entity";
 import { DepartmentEntity } from "./department.entity";
-import { RoleDepartmentEntity } from "./role-departament.entity";
 import { RoleEntity } from "./role.entity";
 import { SaleProductEntity } from "./sale_product.entity";
 import { SaleEntity } from "./sale.entity";
@@ -33,11 +32,6 @@ export const repositoryProviders = [
     {
         provide: RepositoryEnum.DEPARTMENT,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(DepartmentEntity),
-        inject: ['DATA_SOURCE'],
-    },
-    {
-        provide: RepositoryEnum.ROLE_DEPARTMENT,
-        useFactory: (dataSource: DataSource) => dataSource.getRepository(RoleDepartmentEntity),
         inject: ['DATA_SOURCE'],
     },
     {
