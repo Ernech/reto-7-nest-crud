@@ -1,7 +1,7 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { BaseEntity } from "./base-entity";
-import { ClientSaleEntity } from "./client-sale.entity";
 import { SaleProductEntity } from "./sale_product.entity";
+import { ClientEntity } from "./client.entity";
 
 
 @Entity('SALE')
@@ -16,10 +16,11 @@ export class SaleEntity extends BaseEntity{
         default: () => 'CURRENT_TIMESTAMP'})
     saleDate:Date;
 
-    @OneToMany(()=>ClientSaleEntity,(clientSale)=>clientSale.sale)
-    clientSale:ClientSaleEntity;
-
     @OneToMany(()=>SaleProductEntity,(saleProduct)=>saleProduct.sale)
     saleProduct:SaleProductEntity;
+
+    @ManyToOne(()=>ClientEntity,(client)=>client.sales)
+    @JoinColumn({name:'CLIENT_ID'})
+    client:ClientEntity;
 
 }

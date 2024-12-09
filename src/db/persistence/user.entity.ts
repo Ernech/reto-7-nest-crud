@@ -1,8 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { RoleEntity } from "./role.entity";
-import { DepartmentEntity } from "./department.entity";
 import { BaseEntity } from "./base-entity";
-import { DependenciesScanner } from "@nestjs/core/scanner";
+
 
 
 @Entity('USERS')

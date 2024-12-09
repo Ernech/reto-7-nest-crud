@@ -2,7 +2,6 @@ import { DataSource } from "typeorm";
 import { ProductEntity } from "./product.entity";
 import { RepositoryEnum } from "src/enums/repositories.enum";
 import { ClientEntity } from "./client.entity";
-import { ClientSaleEntity } from "./client-sale.entity";
 import { DepartmentEntity } from "./department.entity";
 import { RoleEntity } from "./role.entity";
 import { SaleProductEntity } from "./sale_product.entity";
@@ -21,12 +20,6 @@ export const repositoryProviders = [
     {
         provide: RepositoryEnum.PRODUCT,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(ProductEntity),
-        inject: ['DATA_SOURCE'],
-    },
-
-    {
-        provide: RepositoryEnum.CLIENT_SALE,
-        useFactory: (dataSource: DataSource) => dataSource.getRepository(ClientSaleEntity),
         inject: ['DATA_SOURCE'],
     },
     {
