@@ -11,7 +11,7 @@ export class BaseEntity{
     @Column({name:'STATUS',default:1})
     status: number;
 
-    @Column({name:'CREATED_BY'})
+    @Column({name:'CREATED_BY', default:0})
     createdBy:number;
 
     @CreateDateColumn({
@@ -21,7 +21,7 @@ export class BaseEntity{
     })
 
 
-    @Column({name:'UPDATED_BY'})
+    @Column({name:'UPDATED_BY', default:0})
     updatedBy:number;
 
     createdAt: Date;
