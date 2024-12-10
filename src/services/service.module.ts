@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { DatabaseModule } from 'src/db/database.module';
 import { SeedService } from './seed/seed.service';
+import { EncryptionService } from './encryption/encryption.service';
 
 @Module({
     imports:[
@@ -12,7 +13,7 @@ import { SeedService } from './seed/seed.service';
             signOptions: { expiresIn: '2h' },
           }),
     ],
-    providers:[SeedService],
+    providers:[SeedService, EncryptionService],
     exports:[]
 })
 export class ServiceModule {}
