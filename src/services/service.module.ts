@@ -5,10 +5,12 @@ import { SeedService } from './seed/seed.service';
 import { EncryptionService } from './encryption/encryption.service';
 import { UserService } from './user/user.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
     imports:[
         DatabaseModule,
+        PassportModule.register({defaultStrategy:'jwt'}),
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],

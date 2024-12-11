@@ -4,6 +4,7 @@ import { RoleGuard } from './role.guard';
 import { TokenGuard } from './token.guard';
 import { TrimPipe } from './trim.pipe.guard';
 import { ServiceModule } from 'src/services/service.module';
+import { AuthGuard } from '@nestjs/passport';
 
 @Module({
 
@@ -16,6 +17,10 @@ import { ServiceModule } from 'src/services/service.module';
         {
             provide:APP_GUARD,
             useClass:RoleGuard
+        },
+        {
+            provide:APP_GUARD,
+            useClass:TokenGuard
         },
         {
             provide:APP_PIPE,

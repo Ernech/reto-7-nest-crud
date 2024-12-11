@@ -32,4 +32,11 @@ export class UserService {
         const token=await this.tokenService.signAsync({id:user.id, role:user.role.roleName},{secret: process.env.PRIVATEKEY});
         return token;
     }
+
+    async findUserById(id:number){
+        const user = await this.userRepository.findOne({
+            where:{id,status:1},
+            relations:['role']});
+        return user;
+    }
 }
