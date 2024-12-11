@@ -1,42 +1,20 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
 @Injectable()
-export class TokenGuard implements CanActivate {
+export class TokenGuard extends AuthGuard('jwt') {
+  
+  handleRequest(err: any, user: any, info: any, context: any) {
+    if (err || !user) {
 
-  constructor(private reflector:Reflector, private tokenService: JwtService){}
-
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-
-
-    const authRequired = this.reflector.get<string[]>(
-      'authorizationRequired',
-      context.getHandler(),
-    );
-
-   const request = context.switchToHttp().getRequest()
-   const authorizationHeader = request.headers.authorization;
-
-   if(!authorizationHeader){
-      if(!authRequired){
-        return true;
+      if (info?.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('El token ha expirado, por favor inicia sesión nuevamente.');
+      } else if (info?.name === 'JsonWebTokenError') {
+        throw new UnauthorizedException('El token no es válido, por favor verifica tu credencial.');
+      } else {
+        throw new UnauthorizedException('No autorizado.');
       }
-      throw new UnauthorizedException('No puede acceder a este recruso')
-   }
-   const auth = authorizationHeader ? authorizationHeader.split(' ') : null;
-   if(auth && auth.length===2 && auth[0] === 'Bearer'){
-      try {
-        
-        const validateToken = this.tokenService.verify(auth[1],{ secret: process.env.PRIVATEKEY })
-        if(validateToken){
-          return true
-        }
-      } catch (error) {
-        throw new UnauthorizedException('Token inválido o expirado')
-      }
-   }
+    }
+    return user;
   }
 }

@@ -6,6 +6,7 @@ import { UserService } from 'src/services/user/user.service';
 export class AuthController {
 
     constructor(private readonly userService:UserService){}
+    
 
     @Post()
     async loginUser(@Body() loginDTO:LoginDTO){

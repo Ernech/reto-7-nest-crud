@@ -11,12 +11,11 @@ export class UserController {
 
     constructor(private readonly userService:UserService){}
 
-    @Authorization(true)
-    @AuthUser()
+    @Authorization()
     @Roles('ADMIN_ROLE')
     @Post()
-    async createUser(@Body() createUserDto:CreateUserDTO, @Req() req){
-        return await this.userService.createUser(createUserDto,req.user)
+    async createUser(@Body() createUserDto:CreateUserDTO, @AuthUser() user:UserEntity){
+        return await this.userService.createUser(createUserDto,user)
     }
 
 }
