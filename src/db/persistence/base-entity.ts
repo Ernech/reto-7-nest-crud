@@ -19,12 +19,12 @@ export class BaseEntity{
         type: 'timestamp', 
         default: () => 'CURRENT_TIMESTAMP'
     })
-
+    createdAt: Date;
 
     @Column({name:'UPDATED_BY', default:0})
     updatedBy:number;
 
-    createdAt: Date;
+    
     @CreateDateColumn({
         name: 'UPDATED_AT',
         type: 'timestamp',
