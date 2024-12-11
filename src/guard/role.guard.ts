@@ -21,8 +21,8 @@ export class RoleGuard implements CanActivate {
     if (!token) {
       throw new UnauthorizedException('No tiene permiso para accedera este recurso')
     }
-
-    const decodedToken = this.tokenService.verify(token)
+    const spltedToken = token.split(' ')
+    const decodedToken = this.tokenService.verify(spltedToken[1],{secret:process.env.PRIVATEKEY})
     const role = decodedToken.role || null;
     const hasRole = () => roles.includes(role)
     return hasRole()

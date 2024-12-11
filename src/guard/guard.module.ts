@@ -19,10 +19,6 @@ import { AuthGuard } from '@nestjs/passport';
             useClass:RoleGuard
         },
         {
-            provide:APP_GUARD,
-            useClass:TokenGuard
-        },
-        {
             provide:APP_PIPE,
             useClass:TrimPipe
         }

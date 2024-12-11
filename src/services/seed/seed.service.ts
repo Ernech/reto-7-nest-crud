@@ -26,7 +26,7 @@ export class SeedService implements OnApplicationBootstrap{
         if(!roles || roles.length==0){
             await this.CreateRoles();
         }
-        const user = await this.UserRepository.findOne({where:{status:1, userName:'ADMIN_ROLE'}});
+        const user = await this.UserRepository.findOne({where:{status:1, userName:process.env.ADMIN_USERNAME}});
         if(!user){
             await this.CreateSuperAdmin()
         }

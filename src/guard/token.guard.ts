@@ -27,8 +27,9 @@ export class TokenGuard implements CanActivate {
       throw new UnauthorizedException('No puede acceder a este recruso')
    }
    const auth = authorizationHeader ? authorizationHeader.split(' ') : null;
-   if(auth && auth.length===2 && auth[0] === 'bearer'){
+   if(auth && auth.length===2 && auth[0] === 'Bearer'){
       try {
+        
         const validateToken = this.tokenService.verify(auth[1],{ secret: process.env.PRIVATEKEY })
         if(validateToken){
           return true
