@@ -23,6 +23,6 @@ import { ClientsService } from './clients/clients.service';
           }),
     ],
     providers:[SeedService, EncryptionService, UserService,JwtService,JwtStrategy, ClientsService],
-    exports:[UserService,JwtService]
+    exports:[UserService,JwtService,ClientsService]
 })
 export class ServiceModule {}

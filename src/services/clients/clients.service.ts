@@ -48,7 +48,7 @@ export class ClientsService {
         }
     }
 
-    async getClients(limit:number, offset:number){
+    async getClients(limit:number=0, offset:number=0){
         try {
             const clients =  this.clientsRepository.createQueryBuilder("CLIENT").select()
             .where("CLIENT.STATUS=1")
