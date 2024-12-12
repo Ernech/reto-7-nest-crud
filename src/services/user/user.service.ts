@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserEntity } from 'src/db/persistence/user.entity';
 import { RepositoryEnum } from 'src/enums/repositories.enum';
@@ -35,7 +35,7 @@ export class UserService {
         if (!isPasswordCorrect) {
             throw new UnauthorizedException("Credenciales incorrectas");
         }
-        const token = await this.tokenService.signAsync({ id: user.id, role: user.role.roleName }, { secret: process.env.PRIVATEKEY });
+        const token = await this.tokenService.signAsync({ id: user.id, role: user.role.roleName }, { secret: process.env.PRIVATEKEY , expiresIn: '2h' });
         return token;
     }
 
@@ -81,5 +81,20 @@ export class UserService {
             relations: ['role']
         });
         return user;
+    }
+
+    async deleteUser(userId:number,currentUser:UserEntity){
+        try {
+            const user = await this.userRepository.findOneBy({id:userId});
+            if(!user){
+                throw new NotFoundException("No se encontró al usuario");
+            }
+            user.status=2;
+            user.updatedBy=currentUser.id;
+            await this.userRepository.save(user);
+            return {ok:true, msg:`El usuario ${user.userName} fue eliminado`}
+        } catch (error) {
+            throw new InternalServerErrorException(`Ocurrió un error`);
+        }
     }
 }

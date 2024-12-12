@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Param, ParseIntPipe, Post, Req } from '@nestjs/common';
 import { UserEntity } from 'src/db/persistence/user.entity';
 import { AuthUser } from 'src/decorators/auth-user.decorator';
 import { Authorization } from 'src/decorators/auth.decorator';
@@ -16,6 +16,13 @@ export class UserController {
     @Post()
     async createUser(@Body() createUserDto:CreateUserDTO, @AuthUser() user:UserEntity){
         return await this.userService.createUser(createUserDto,user)
+    }
+
+    @Authorization()
+    @Roles('ADMIN_ROLE')
+    @Delete(':id')
+    async deleteUser(@Param('id',new ParseIntPipe()) id:number,@AuthUser() user:UserEntity){
+        return await this.userService.deleteUser(id, user);
     }
 
 }
