@@ -26,10 +26,13 @@ export class ProductsService {
             if(!product){
                 throw new NotFoundException('Producto no encontrado');
             }
+            if(!product.available){
+                throw new NotFoundException('El producto no se encuentra disponible');
+            }
             product.productName=productDTO.productName;
             product.productDescription=productDTO.productDescription;
             product.productPrice=productDTO.productPrice;
-            product.productStock=product.productStock;
+            product.productStock=productDTO.productStock;
             product.updatedBy=currentUser.id;
             return await this.productRepository.save(product);
         } catch (error) {
@@ -50,6 +53,21 @@ export class ProductsService {
             throw new InternalServerErrorException("Ocurrió un error");
         }
     }
+
+    async changeAviability(productId:number, currentUser:UserEntity){
+        try {
+            const product = await this.productRepository.findOneBy({id:productId,status:1});
+            if(!product){
+                throw new NotFoundException('Producto no encontrado');
+            }
+            product.available = !product.available;
+            product.updatedBy = currentUser.id;
+            return {msg: `la disponibilidad del producto ${product.productName} fue modificada`}
+        } catch (error) {
+            throw new InternalServerErrorException("Ocurrió un error");
+        }
+    }
+
 
     async findProducts(limit:number=0,offset:number=0,name:string=''){
         try {
