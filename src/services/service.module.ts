@@ -24,6 +24,6 @@ import { ProductsService } from './products/products.service';
           }),
     ],
     providers:[SeedService, EncryptionService, UserService,JwtService,JwtStrategy, ClientsService, ProductsService],
-    exports:[UserService,JwtService,ClientsService]
+    exports:[UserService,JwtService,ClientsService, ProductsService]
 })
 export class ServiceModule {}
