@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from 'src/passport/jwt.strategy';
 import { ClientsService } from './clients/clients.service';
+import { ProductsService } from './products/products.service';
 
 @Module({
     imports:[
@@ -22,7 +23,7 @@ import { ClientsService } from './clients/clients.service';
             }),
           }),
     ],
-    providers:[SeedService, EncryptionService, UserService,JwtService,JwtStrategy, ClientsService],
+    providers:[SeedService, EncryptionService, UserService,JwtService,JwtStrategy, ClientsService, ProductsService],
     exports:[UserService,JwtService,ClientsService]
 })
 export class ServiceModule {}
