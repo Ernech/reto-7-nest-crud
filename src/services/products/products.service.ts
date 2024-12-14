@@ -48,6 +48,7 @@ export class ProductsService {
             }
             product.status = 2;
             product.updatedBy = currentUser.id;
+            await this.productRepository.save(product);
             return {msg: `El producto ${product.productName} fue eliminado`}
         } catch (error) {
             throw new InternalServerErrorException("Ocurrió un error");
@@ -62,6 +63,7 @@ export class ProductsService {
             }
             product.available = !product.available;
             product.updatedBy = currentUser.id;
+            await this.productRepository.save(product)
             return {msg: `la disponibilidad del producto ${product.productName} fue modificada`}
         } catch (error) {
             throw new InternalServerErrorException("Ocurrió un error");
@@ -72,14 +74,15 @@ export class ProductsService {
     async findProducts(limit:number=0,offset:number=0,name:string=''){
         try {
             const query = this.productRepository.createQueryBuilder('PRODUCT')
-            .where("PRODUCT.STATUS:=1")
+            .where("PRODUCT.STATUS =1")
             .skip(offset)
             .take(limit)
             if(name && name!==''){
-                query.andWhere('UPPER(PRODUCT_NAME) LIKE :name',{name:`%${name.toUpperCase()}%`})
+                query.andWhere('UPPER(PRODUCT.PRODUCT_NAME) LIKE :name',{name:`%${name.toUpperCase()}%`})
             }
             return await query.getMany();
         } catch (error) {
+            console.log(error);
             throw new InternalServerErrorException("Ocurrió un error");
         }
     }

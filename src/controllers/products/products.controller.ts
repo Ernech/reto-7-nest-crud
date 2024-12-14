@@ -39,7 +39,7 @@ export class ProductsController {
     @Authorization()
     @Roles("WAREHOUSE_ADMIN_ROLE")
     @Delete(":id")
-    async deleteProduct(@Param(":id", new ParseIntPipe()) id:number,
+    async deleteProduct(@Param("id", new ParseIntPipe()) id:number,
                         @AuthUser() currentUser:UserEntity){
         return await this.productService.deleteProduct(id,currentUser);
     }
@@ -47,7 +47,7 @@ export class ProductsController {
     @Authorization()
     @Roles("WAREHOUSE_ADMIN_ROLE")
     @Patch(":id")
-    async changeAviability(@Param(":id", new ParseIntPipe()) id:number,
+    async changeAviability(@Param("id", new ParseIntPipe()) id:number,
                            @AuthUser() currentUser:UserEntity){
         return await this.productService.changeAviability(id,currentUser);
     }
