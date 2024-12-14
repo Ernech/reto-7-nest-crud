@@ -64,7 +64,7 @@ export class ProductsService {
             product.available = !product.available;
             product.updatedBy = currentUser.id;
             await this.productRepository.save(product)
-            return {msg: `la disponibilidad del producto ${product.productName} fue modificada`}
+            return {msg: `La disponibilidad del producto ${product.productName} fue modificada`}
         } catch (error) {
             throw new InternalServerErrorException("Ocurrió un error");
         }

@@ -40,40 +40,41 @@ export class UserService {
     }
 
     async createUser(createUserDTO: CreateUserDTO, currentUser: UserEntity) {
-   
-        const department = await this.departmentRepository.findOne(
-            {
-                where:
-                {
-                    id: createUserDTO.departmentId,
-                    status: 1
-                },
-                relations: ['roles']
-            });
+        // Recuperar el departamento junto con los roles
+        const department = await this.departmentRepository.findOne({
+            where: {
+                id: createUserDTO.departmentId,
+                status: 1
+            },
+            relations: ['roles']
+        });
+    
         if (!department) {
             throw new BadRequestException(`No se encontró el departamento con id: ${createUserDTO.departmentId}`);
         }
-        //Recuperar el rol
-        const role = await this.roleRepository.findOne({ where: { id: createUserDTO.roleId, status: 1 } });
+    
+        // Validar que el rol pertenece al departamento
+        const role = department.roles.find((departmentRole) => departmentRole.id === createUserDTO.roleId);
         if (!role) {
-            throw new BadRequestException(`No se encontró el rol con id: ${createUserDTO.roleId}`);
-        }
-        //Verificar que el rol corresponde al departamento
-        if (!department.roles.find(department => department.id = role.id)) {
             throw new BadRequestException(`El rol con id: ${createUserDTO.roleId} no corresponde al departamento enviado`);
         }
-
-        //Se crea el usuario
+    
+        // Encriptar la contraseña
         const cryptedPassword = await this.encryptionService.cryptPassword(createUserDTO.password);
+    
+        // Crear y guardar el usuario
         const newUser = this.userRepository.create({
-            userName: createUserDTO.userName, password: cryptedPassword,
+            userName: createUserDTO.userName,
+            password: cryptedPassword,
             role,
             createdBy: currentUser.id,
             updatedBy: currentUser.id
-        })
-        const {id, userName} = await this.userRepository.save(newUser)
-        return {id,userName};
+        });
+    
+        const { id, userName } = await this.userRepository.save(newUser);
+        return { id, userName };
     }
+    
 
     async findUserById(id: number) {
         const user = await this.userRepository.findOne({

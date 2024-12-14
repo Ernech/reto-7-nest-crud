@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { SaleEntity } from "./sale.entity";
 import { ProductEntity } from "./product.entity";
 import { BaseEntity } from "./base-entity";
@@ -14,6 +14,12 @@ export class SaleProductEntity extends BaseEntity{
     @ManyToOne(()=>ProductEntity,(product)=>product.saleProduct,{cascade:true})
     @JoinColumn({name:'PRODUCT_ID'})
     product:ProductEntity;
+
+    @Column("QUANTITY")
+    quantity:number;
     
+    
+    @Column("SALE_PRICE")
+    salePrice:number;
 
 }

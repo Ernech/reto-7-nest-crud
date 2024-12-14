@@ -9,6 +9,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from 'src/passport/jwt.strategy';
 import { ClientsService } from './clients/clients.service';
 import { ProductsService } from './products/products.service';
+import { VentasService } from './ventas/ventas.service';
+import { SalesService } from './sales/sales.service';
 
 @Module({
     imports:[
@@ -23,7 +25,7 @@ import { ProductsService } from './products/products.service';
             }),
           }),
     ],
-    providers:[SeedService, EncryptionService, UserService,JwtService,JwtStrategy, ClientsService, ProductsService],
+    providers:[SeedService, EncryptionService, UserService,JwtService,JwtStrategy, ClientsService, ProductsService, VentasService, SalesService],
     exports:[UserService,JwtService,ClientsService, ProductsService]
 })
 export class ServiceModule {}
