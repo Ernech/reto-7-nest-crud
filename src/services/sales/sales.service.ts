@@ -103,10 +103,11 @@ export class SalesService {
             if (!client) throw new NotFoundException(`El cliente con id: ${clientId} no fue encontrado`);
     
             // Recuperar las ventas del cliente con estado activo
-            const sales = await this.saleRepository.find({
-                where: { client, status: 1 },
-                relations: ['saleProducts'], 
-            });
+            const sales = await this.saleRepository.createQueryBuilder('SALE')
+            .where("SALE.client.id=:id",{id:clientId})
+            .andWhere("SALE.status=1")
+            .getMany();
+
     
             if (sales.length === 0) {
                 throw new NotFoundException(`El cliente con id: ${clientId} no tiene ventas registradas`);
@@ -125,7 +126,7 @@ export class SalesService {
                             'SALE_PRODUCT.salePrice AS price',
                             '(SALE_PRODUCT.quantity * SALE_PRODUCT.salePrice) AS subtotal',
                         ])
-                        .innerJoin('PRODUCT.saleProducts', 'SALE_PRODUCT')
+                        .innerJoin('PRODUCT.saleProduct', 'SALE_PRODUCT')
                         .where('SALE_PRODUCT.status = :status', { status: 1 })
                         .andWhere('SALE_PRODUCT.saleId = :saleId', { saleId: sale.id })
                         .getRawMany();
