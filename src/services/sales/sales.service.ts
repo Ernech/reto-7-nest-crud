@@ -13,8 +13,8 @@ export class SalesService {
 
     constructor(@Inject(RepositoryEnum.SALE) private readonly saleRepository:Repository<SaleEntity>,
     @Inject(RepositoryEnum.SALE_PRODUCT) private readonly saleProductRepository:Repository<SaleProductEntity>,                
-    @Inject(RepositoryEnum.CLIENT) private readonly clientRepository:Repository<ClientEntity>,   
-    @Inject(RepositoryEnum.PRODUCT) private readonly productRepository:Repository<ProductEntity>, 
+    @Inject(RepositoryEnum.CLIENT) private readonly clientRepository:Repository<ClientEntity>,  
+    @Inject(RepositoryEnum.PRODUCT) private readonly productRepository:Repository<ProductEntity>,                
     private readonly dataSource:DataSource              
     ){}
 
@@ -32,6 +32,7 @@ export class SalesService {
             }
     
             // 2. Validar y preparar productos
+            if(saleDTO.products.length<=0) throw new BadRequestException("La lista de productos no puede estar vacía");
             const productPromises = saleDTO.products.map(async (productDTO) => {
                 const product = await queryRunner.manager.findOneBy(ProductEntity, { id: productDTO.productId, status: 1 });
                 if (!product) {
@@ -95,6 +96,81 @@ export class SalesService {
         }
     }
     
+    async getSalesByClientId(clientId:number){
+        try {
+            // Recuperar al cliente
+            const client = await this.clientRepository.findOneBy({ id: clientId, status: 1 });
+            if (!client) throw new NotFoundException(`El cliente con id: ${clientId} no fue encontrado`);
+    
+            // Recuperar las ventas del cliente con estado activo
+            const sales = await this.saleRepository.find({
+                where: { client, status: 1 },
+                relations: ['saleProducts'], 
+            });
+    
+            if (sales.length === 0) {
+                throw new NotFoundException(`El cliente con id: ${clientId} no tiene ventas registradas`);
+            }
+    
+            // Generar resumen de ventas del cliente
+            const clientSalesSummary = await Promise.all(
+                sales.map(async (sale) => {
+                    // Recuperar los productos y subtotales de la venta
+                    const products = await this.productRepository.createQueryBuilder('PRODUCT')
+                        .select([
+                            'PRODUCT.id AS id',
+                            'PRODUCT.productName AS name',
+                            'PRODUCT.productDescription AS description',
+                            'SALE_PRODUCT.quantity AS quantity',
+                            'SALE_PRODUCT.salePrice AS price',
+                            '(SALE_PRODUCT.quantity * SALE_PRODUCT.salePrice) AS subtotal',
+                        ])
+                        .innerJoin('PRODUCT.saleProducts', 'SALE_PRODUCT')
+                        .where('SALE_PRODUCT.status = :status', { status: 1 })
+                        .andWhere('SALE_PRODUCT.saleId = :saleId', { saleId: sale.id })
+                        .getRawMany();
+    
+                    // Calcular el total de la venta
+                    const total = await this.saleProductRepository.createQueryBuilder('SALE_PRODUCT')
+                        .select('SUM(SALE_PRODUCT.quantity * SALE_PRODUCT.salePrice)', 'total')
+                        .where('SALE_PRODUCT.saleId = :saleId', { saleId: sale.id })
+                        .andWhere('SALE_PRODUCT.status = :status', { status: 1 })
+                        .getRawOne();
+    
+                    return {
+                        saleId: sale.id,
+                        saleNumber: sale.saleNumber,
+                        products,
+                        total: total?.total || 0,
+                    };
+                }),
+            );
+    
+            // Retornar ;as ventas
+            return {
+                id: client.id,
+                name: client.clientName,
+                description: client.clientDescription,
+                sales: clientSalesSummary,
+            };
+        } catch (error) {
+            console.error(error); // Para depurar
+            throw new InternalServerErrorException('Ocurrió un error al recuperar las ventas del cliente');
+        }
+    }
+
+    async deleteSale(saleId:number, currentUser:UserEntity){
+        try{
+            const sale = await this.saleRepository.findOneBy({id:saleId, status:1});
+            if(!sale) throw new NotFoundException(`La venta con id: ${saleId} no existe`);
+            sale.status = 2;
+            sale.updatedBy=currentUser.id;
+            await this.saleRepository.save(sale);
+            return {msg: `Se ha eliminado la venta de forma exitosa`};
+        }catch(error){
+            throw new InternalServerErrorException("Ha ocurrido un error");
+        }
+    }
     
 
 }

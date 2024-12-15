@@ -15,11 +15,10 @@ export class SaleProductEntity extends BaseEntity{
     @JoinColumn({name:'PRODUCT_ID'})
     product:ProductEntity;
 
-    @Column("QUANTITY")
+    @Column({name:"QUANTITY"})
     quantity:number;
     
-    
-    @Column("SALE_PRICE")
+    @Column({name:"SALE_PRICE",type: 'numeric', precision: 10, scale: 2})
     salePrice:number;
 
 }

@@ -14,37 +14,37 @@ export const repositoryProviders = [
     {
         provide: RepositoryEnum.CLIENT,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(ClientEntity),
-        inject: ['DATA_SOURCE'], 
+        inject: [DataSource], 
     },
 
     {
         provide: RepositoryEnum.PRODUCT,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(ProductEntity),
-        inject: ['DATA_SOURCE'],
+        inject: [DataSource],
     },
     {
         provide: RepositoryEnum.DEPARTMENT,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(DepartmentEntity),
-        inject: ['DATA_SOURCE'],
+        inject: [DataSource],
     },
     {
         provide: RepositoryEnum.ROLE,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(RoleEntity),
-        inject: ['DATA_SOURCE'],
+        inject: [DataSource],
     },
     {
         provide: RepositoryEnum.SALE_PRODUCT,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(SaleProductEntity),
-        inject: ['DATA_SOURCE'],
+        inject: [DataSource],
     },
     {
         provide: RepositoryEnum.SALE,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(SaleEntity),
-        inject: ['DATA_SOURCE'],
+        inject: [DataSource],
     },
     {
         provide: RepositoryEnum.USER,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(UserEntity),
-        inject: ['DATA_SOURCE'],
+        inject: [DataSource],
     },
 ] 
