@@ -96,7 +96,7 @@ export class SalesService {
         }
     }
     
-    async getSalesByClientId(clientId:number){
+    async getSalesByClientId(clientId: number) {
         try {
             // Recuperar al cliente
             const client = await this.clientRepository.findOneBy({ id: clientId, status: 1 });
@@ -104,18 +104,20 @@ export class SalesService {
     
             // Recuperar las ventas del cliente con estado activo
             const sales = await this.saleRepository.createQueryBuilder('SALE')
-            .where("SALE.client.id=:id",{id:clientId})
-            .andWhere("SALE.status=1")
-            .getMany();
+                .where("SALE.client.id = :id", { id: clientId })
+                .andWhere("SALE.status = 1")
+                .getMany();
+            
+           
 
-    
-            if (sales.length === 0) {
+            if (!sales || sales.length === 0) {
                 throw new NotFoundException(`El cliente con id: ${clientId} no tiene ventas registradas`);
             }
     
             // Generar resumen de ventas del cliente
             const clientSalesSummary = await Promise.all(
                 sales.map(async (sale) => {
+
                     // Recuperar los productos y subtotales de la venta
                     const products = await this.productRepository.createQueryBuilder('PRODUCT')
                         .select([
@@ -128,13 +130,13 @@ export class SalesService {
                         ])
                         .innerJoin('PRODUCT.saleProduct', 'SALE_PRODUCT')
                         .where('SALE_PRODUCT.status = :status', { status: 1 })
-                        .andWhere('SALE_PRODUCT.saleId = :saleId', { saleId: sale.id })
+                        .andWhere('SALE_PRODUCT.SALE_ID = :id', { id: sale.id })
                         .getRawMany();
     
                     // Calcular el total de la venta
                     const total = await this.saleProductRepository.createQueryBuilder('SALE_PRODUCT')
                         .select('SUM(SALE_PRODUCT.quantity * SALE_PRODUCT.salePrice)', 'total')
-                        .where('SALE_PRODUCT.saleId = :saleId', { saleId: sale.id })
+                        .where('SALE_PRODUCT.SALE_ID = :id', { id: sale.id })
                         .andWhere('SALE_PRODUCT.status = :status', { status: 1 })
                         .getRawOne();
     
@@ -147,7 +149,7 @@ export class SalesService {
                 }),
             );
     
-            // Retornar ;as ventas
+            // Retornar las ventas
             return {
                 id: client.id,
                 name: client.clientName,
@@ -155,7 +157,7 @@ export class SalesService {
                 sales: clientSalesSummary,
             };
         } catch (error) {
-            console.error(error); // Para depurar
+          
             throw new InternalServerErrorException('Ocurrió un error al recuperar las ventas del cliente');
         }
     }
