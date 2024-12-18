@@ -1,21 +1,21 @@
 import { BadRequestException, Inject, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserEntity } from 'src/db/persistence/user.entity';
-import { RepositoryEnum } from 'src/enums/repositories.enum';
+
 import { Repository } from 'typeorm';
 import { EncryptionService } from '../encryption/encryption.service';
-import { LoginDTO } from 'src/dto/login.dto';
-import { DepartmentEntity } from 'src/db/persistence/department.entity';
-import { RoleEntity } from 'src/db/persistence/role.entity';
-import { CreateUserDTO } from 'src/dto/create-user.dto';
+import { LoginDTO } from '@dto/login.dto';
+
+import { CreateUserDTO } from '@dto/create-user.dto';
+import { DepartmentEntity } from '@src/db/persistence/department.entity';
+import { UserEntity } from '@src/db/persistence/user.entity';
+import { RepositoryEnum } from '@src/enums/repositories.enum';
 
 @Injectable()
 export class UserService {
 
     constructor(
-        @Inject(RepositoryEnum.USER) private readonly userRepository: Repository<UserEntity>,
         @Inject(RepositoryEnum.DEPARTMENT) private readonly departmentRepository: Repository<DepartmentEntity>,
-        @Inject(RepositoryEnum.ROLE) private readonly roleRepository: Repository<RoleEntity>,
+        @Inject(RepositoryEnum.USER) private readonly userRepository: Repository<UserEntity>,
         private readonly tokenService: JwtService,
         private readonly encryptionService: EncryptionService) { }
 

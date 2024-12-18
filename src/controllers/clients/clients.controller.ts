@@ -20,7 +20,7 @@ export class ClientsController {
     @ApiQuery({name:"limit",required:false, default:0,type:Number})
     @ApiQuery({name:"offset",required:false, default:0,type:Number})
     @Authorization()
-    @Roles("CLIENTS_ADMIN_ROLE", "CLIENTS_USER_ROLE")
+    @Roles("CLIENTS_ADMIN_ROLE", "CLIENTS_USER_ROLE","SALES_ADMIN_ROLE", "SALES_USER_ROLE")
     @Get()
     async getClients(@Query("limit") limit: number, @Query("offset") offset: number) {
         return await this.clientsService.getClients(limit, offset);
