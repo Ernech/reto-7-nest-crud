@@ -22,3 +22,7 @@ npm run start:dev
 localhost:5433
 ```
 
+6. To access to Swagger documentation go to:
+```
+localhost:5433/api
+```
